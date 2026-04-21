@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CampusBuild - Formaciones Académicas</title>
+  <link rel="stylesheet" href="style .css" />
+  <link rel="shortcut icon" href="img/icono_redondo.png" type="image/x-icon">
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.81/build/spline-viewer.js"></script>
+</head>
+<body>
+
+  <!-- Fondo animado -->
+  <canvas id="galaxy-canvas"></canvas>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">CAMPUSBUILD</div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">Inicio</h1>
+      <p class="hero-description">
+        CampusBuild, empresa líder en construcción, busca optimizar la gestión de sus proyectos
+        mediante el desarrollo de una aplicación web personalizada. Esta plataforma permitirá
+        centralizar la planificación, seguimiento de actividades, control de hitos y asignación
+        de recursos humanos en todas las etapas del proyecto. Con una interfaz intuitiva y un
+        enfoque en la colaboración, la herramienta facilitará la toma de decisiones, mejorará
+        la coordinación de los equipos y aumentará la eficiencia operativa en cada obra.
+      </p>
+      <div class="hero-buttons">
+        <a class="btn-primary" href="html/index (2).html">Ver página</a>
+        <a class="btn-secondary" href="html/creditos.html">Creador</a>
+      </div>
+    </div>
+
+    <div class="hero-spline">
+      <spline-viewer url="https://prod.spline.design/ZXK8zHXl5zTQ7O0i/scene.splinecode"></spline-viewer>
+    </div>
+  </section>
+
+  <!-- Dots indicadores -->
+  <div class="dots-nav">
+    <span class="dot active"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+
+  <!-- IMPORTANTE: cargar DESPUÉS del DOM -->
+  <script src="fuctions.js"></script>
+</body>
+</html>

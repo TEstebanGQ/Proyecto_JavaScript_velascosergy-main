@@ -1,0 +1,127 @@
+/* ═══════════════════════════════════
+   dashboard.css
+   Estilos específicos del Dashboard:
+   - Grid de stat cards con borde de acento superior
+   - Sección de dash-row con dos columnas (proyectos / actividades)
+   - Adaptación responsive a pantallas pequeñas
+═══════════════════════════════════ */
+
+/* ── Grid de 4 tarjetas de estadísticas en el Dashboard ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);   /* 4 columnas iguales */
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* ── Tarjeta individual de estadística ── */
+.stat-card {
+  background: var(--surface);               /* Fondo translúcido oscuro */
+  backdrop-filter: blur(20px);              /* Efecto cristal glassmorphism */
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: border-color 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Línea de acento superior (decorativa, se colorea con --card-accent en cada card) */
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-1), transparent);
+  opacity: 0.5;
+}
+
+/* Hover: eleva la tarjeta levemente y resalta el borde */
+.stat-card:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-2px);
+}
+
+/* Contenedor del texto de la stat card */
+.stat-info    { flex: 1; }
+
+/* Etiqueta pequeña en mayúsculas sobre el número */
+.stat-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+/* Número principal grande */
+.stat-value {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+
+/* Subtexto debajo del número (ej: "3 terminadas") */
+.stat-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Ícono de la stat card (emoji en un cuadrado de fondo) */
+.stat-icon {
+  width: 46px; height: 46px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+/* ── Fila inferior del dashboard: 2 columnas (proyectos + actividades) ── */
+.dash-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;   /* Dos columnas iguales */
+  gap: 16px;
+}
+
+/* ── Tarjeta de lista del dashboard ── */
+.dash-card {
+  background: var(--surface);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+/* Título de la tarjeta de lista */
+.dash-card-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-lite);
+}
+
+/* Fila individual dentro de la dash-card (ej: nombre del proyecto + porcentaje) */
+.dash-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-lite);
+  font-size: 13px;
+}
+.dash-item:last-child { border-bottom: none; }   /* Última fila sin borde */
+
+/* ── Responsive: apila las columnas en pantallas angostas ── */
+@media (max-width: 860px) {
+  .dash-row { grid-template-columns: 1fr; }   /* Una sola columna en móvil */
+}

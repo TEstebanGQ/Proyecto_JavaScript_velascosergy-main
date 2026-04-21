@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- =============================================
+       META & CONFIGURACIÓN BÁSICA
+       Configuración de charset, viewport y SEO básico
+  ============================================= -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portafolio de Sergio Velasco — Desarrollador Front-End" />
+  <title>Sergio Velasco · Dev</title>
+
+  <!-- =============================================
+       FUENTES GOOGLE
+       Fuentes distintivas para dar personalidad al sitio
+  ============================================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- =============================================
+       THREE.JS — librería 3D para el aura canvas
+       Se carga antes de los scripts del sitio
+  ============================================= -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+
+  <!-- =============================================
+       HOJA DE ESTILOS PRINCIPAL
+       Enlace al CSS separado del proyecto
+  ============================================= -->
+  <link rel="stylesheet" href="../css/creditos-style.css" />
+</head>
+<body>
+
+  <!-- =============================================
+       CANVAS DE FONDO GLOBAL
+       Partículas flotantes que cubren toda la pantalla
+       Controlado por bg-canvas.js
+  ============================================= -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- =============================================
+       NAVBAR SUPERIOR
+       Barra de navegación fija con logo CAMPUSBUILD
+       y botones de acceso rápido: Init y Página
+  ============================================= -->
+  <header class="navbar">
+
+    <!-- Logo / nombre del proyecto -->
+    <span class="navbar-logo">CAMPUS<span class="logo-accent">BUILD</span></span>
+
+    <!-- Botones de navegación -->
+    <nav class="navbar-btns" aria-label="Navegación principal">
+
+      <!-- Botón Init — reemplaza # por la URL de inicio/login -->
+      <a href="../index.html" class="nav-btn nav-btn--ghost">Init</a>
+
+      <!-- Botón Página — reemplaza # por la URL de la página principal -->
+      <a href="../html/index (2).html" class="nav-btn nav-btn--solid">Página</a>
+
+    </nav>
+
+  </header>
+
+  <!-- =============================================
+       SECCIÓN HERO — PRIMERA VISTA
+       Contiene la foto del creador, el aura 3D y el nombre.
+       Ocupa el 100vh, centra todo verticalmente.
+  ============================================= -->
+  <section class="hero" id="hero">
+
+    <!-- Contenedor relativo para superponer foto y canvas de aura -->
+    <div class="photo-wrapper">
+
+      <!-- Canvas del aura 3D (anillos Three.js alrededor de la foto) -->
+      <canvas id="photo-aura-canvas"></canvas>
+
+      <!-- Foto principal del creador -->
+      <img
+        src="../img/sergio.png"
+        alt="Foto de Sergio Velasco"
+        class="profile-photo"
+        draggable="false"
+      />
+
+    </div>
+
+    <!-- Texto de presentación sobre el nombre -->
+    <p class="hero-eyebrow">Desarrollador Front-End</p>
+
+    <!-- Nombre principal en grande -->
+    <h1 class="hero-name">
+      <span class="name-first">Sergio</span>
+      <span class="name-last">Velasco</span>
+    </h1>
+
+    <!-- Indicador de scroll para invitar al usuario a bajar -->
+    <div class="scroll-hint" aria-label="Scroll hacia abajo">
+      <span class="scroll-dot"></span>
+      <span class="scroll-label">Scroll</span>
+    </div>
+
+  </section>
+
+  <!-- =============================================
+       SECCIÓN INFO — APARECE AL HACER SCROLL
+       Descripción biográfica del creador
+  ============================================= -->
+  <section class="info-section" id="about">
+
+    <!-- Etiqueta decorativa de sección -->
+    <span class="section-tag">Sobre mí</span>
+
+    <!-- Título de sección -->
+    <h2 class="section-title">¿Quién soy?</h2>
+
+    <!-- Texto biográfico de Sergio -->
+    <p class="bio-text">
+      ¡Hola! Soy <strong>Sergio Velasco</strong>, un desarrollador front-end con una visión clara:
+      crear experiencias digitales que no solo se vean increíbles, sino que también conecten de forma
+      intuitiva con las personas. Con años de experiencia en el desarrollo web, me especializo en
+      <strong>HTML, CSS y JavaScript</strong>, y tengo un ojo agudo para el diseño visual y la
+      experiencia del usuario.
+    </p>
+    <p class="bio-text">
+      Además de la programación, soy un entusiasta del diseño gráfico, lo que me permite crear
+      interfaces atractivas, funcionales y adaptadas a cualquier dispositivo. Si buscas a alguien
+      <strong>comprometido, creativo y con una sólida base técnica</strong>, estás en el lugar
+      indicado. ¡Bienvenido a mi espacio digital!
+    </p>
+
+    <!-- Chips / etiquetas de habilidades técnicas -->
+    <div class="skills-chips">
+      <span class="chip">HTML</span>
+      <span class="chip">CSS</span>
+      <span class="chip">JavaScript</span>
+      <span class="chip">React</span>
+      <span class="chip">Diseño Gráfico</span>
+    </div>
+
+  </section>
+
+  <!-- =============================================
+       REDES SOCIALES FLOTANTES
+       Íconos que flotan en el lado derecho de la pantalla.
+       Cada enlace lleva al perfil correspondiente del creador.
+       Reemplaza "#" por la URL real de cada red.
+  ============================================= -->
+  <nav class="social-float" aria-label="Redes sociales">
+
+    <!-- Instagram — reemplaza # por tu URL real -->
+    <a
+      href="https://www.instagram.com/iamvelasco0?igsh=ZGhiZTh1MG5pemNu&utm_source=qr"
+      class="social-link"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram de Sergio Velasco"
+    >
+      <img src="../img/instagram.png" alt="Instagram" class="social-icon" />
+      <span class="social-tooltip">Instagram</span>
+    </a>
+
+    <!-- LinkedIn — reemplaza # por tu URL real -->
+    <a
+      href="https://www.linkedin.com/in/sergio-velasco-daza/"
+      class="social-link"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="LinkedIn de Sergio Velasco"
+    >
+      <img src="../img/linkedin.png" alt="LinkedIn" class="social-icon" />
+      <span class="social-tooltip">LinkedIn</span>
+    </a>
+
+    <!-- Discord — reemplaza # por tu URL real -->
+    <a
+      href="https://discord.gg/y4TBtDuw"
+      class="social-link"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Discord de Sergio Velasco"
+    >
+      <img src="../img/discord.png" alt="Discord" class="social-icon" />
+      <span class="social-tooltip">Discord</span>
+    </a>
+
+    <!-- GitHub — reemplaza # por tu URL real -->
+    <a
+      href="https://github.com/velascodazasergio-png"
+      class="social-link"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="GitHub de Sergio Velasco"
+    >
+      <img src="../img/github.png" alt="GitHub" class="social-icon" />
+      <span class="social-tooltip">GitHub</span>
+    </a>
+
+  </nav>
+
+  <!-- =============================================
+       SCRIPTS JS SEPARADOS
+       Se cargan al final del body para no bloquear el render
+  ============================================= -->
+
+  <!-- Script del canvas de fondo (partículas globales) -->
+  <script src="../js/bg-canvas.js" defer></script>
+
+  <!-- Script del aura 3D alrededor de la foto -->
+  <script src="../js/aura-o-laura.js" defer></script>
+
+  <!-- Script de animaciones de entrada y scroll -->
+  <script src="../js/animations.js" defer></script>
+
+</body>
+</html>

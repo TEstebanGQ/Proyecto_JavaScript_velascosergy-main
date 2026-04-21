@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<!-- Declara que el documento usa el estándar HTML5 -->
+<html lang="es">
+<!-- lang="es" indica el idioma español, útil para lectores de pantalla y SEO -->
+
+<head>
+  <!-- La sección <head> contiene metadatos, estilos y la fuente, no contenido visible -->
+
+  <meta charset="UTF-8">
+  <!-- UTF-8 permite mostrar caracteres especiales del español como á, é, ñ, etc. -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Hace que la página se adapte al ancho del dispositivo móvil (base del responsive) -->
+
+  <link rel="shortcut icon" href="../img/icono_redondo.png" type="image/x-icon">
+  <!-- Define el ícono pequeño que aparece en la pestaña del navegador (favicon) -->
+
+  <title>CampusBuild — Gestión de Proyectos</title>
+  <!-- Título visible en la pestaña del navegador y en resultados de búsqueda -->
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <!-- Importa la fuente Plus Jakarta Sans desde Google Fonts con todos los pesos necesarios -->
+
+  <!-- ── Hojas de estilo de la aplicación (orden importa: las últimas sobreescriben las anteriores) ── -->
+
+  <link rel="stylesheet" href="../css/style1.css">
+  <!-- Variables globales, reset, layout, sidebar, topbar, botones, badges, tabla y responsive -->
+
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <!-- Estilos específicos del Dashboard: stat cards y la fila de dos columnas -->
+
+  <link rel="stylesheet" href="../css/components.css">
+  <!-- Estilos de tarjetas de proyectos, filas de actividades e ítems de hitos -->
+
+  <link rel="stylesheet" href="../css/calendar.css">
+  <!-- Estilos del calendario mensual: grid, celdas, eventos coloreados y leyenda -->
+
+  <link rel="stylesheet" href="../css/modals.css">
+  <!-- Estilos de los modales, formularios, notificaciones toast y diálogo de confirmación -->
+
+</head>
+
+<body>
+<!-- El <body> contiene todo el contenido visible de la aplicación -->
+
+
+<!-- ═══════════════════════════════════════════════════════
+     SIDEBAR — Barra de navegación lateral izquierda
+     Panel fijo que no se mueve al hacer scroll.
+     Contiene el logo de la app y los links de navegación.
+     En móvil está oculto y se activa con el botón hamburguesa.
+═══════════════════════════════════════════════════════ -->
+<div class="sidebar" id="sidebar">
+<!-- id="sidebar" permite que JS lo muestre u oculte añadiendo/quitando clases -->
+
+  <!-- Logo: icono emoji + nombre de la app + subtítulo -->
+  <div class="sidebar-logo">
+
+    <div class="logo-icon">🧑🏻‍🚀</div>
+    <!-- Emoji que actúa como ícono visual del logo con gradiente de fondo (definido en CSS) -->
+
+    <div>
+      <!-- Contenedor del texto del logo -->
+
+      <div class="logo-name">CampusBuild</div>
+      <!-- Nombre principal de la aplicación en negrita -->
+
+      <div class="logo-sub">Gestión de Proyectos</div>
+      <!-- Subtítulo descriptivo del propósito de la app -->
+
+    </div>
+  </div>
+  <!-- Fin del logo -->
+
+  <!-- Lista de ítems de navegación -->
+  <nav class="nav">
+  <!-- <nav> indica semánticamente que este bloque es una zona de navegación -->
+
+    <!-- ÍTEM: Dashboard -->
+    <div class="nav-item" onclick="navigate('dashboard'); closeSidebar()">
+    <!-- onclick llama a navigate() para cambiar de página y closeSidebar() para cerrar el menú en móvil -->
+
+      <!-- Icono SVG de cuadrícula 2x2 que representa el Dashboard -->
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      Dashboard
+    </div>
+
+    <!-- ÍTEM: Proyectos -->
+    <div class="nav-item" onclick="navigate('proyectos'); closeSidebar()">
+
+      <!-- Icono SVG de tabla/cuadrícula que representa la sección de proyectos -->
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <path d="M3 9h18M9 21V9"/>
+      </svg>
+      Proyectos
+    </div>
+
+    <!-- ÍTEM: Actividades -->
+    <div class="nav-item" onclick="navigate('actividades'); closeSidebar()">
+
+      <!-- Icono SVG de lista con check que representa las actividades/tareas -->
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+        <path d="M9 12l2 2 4-4"/>
+      </svg>
+      Actividades
+    </div>
+
+    <!-- ÍTEM: Hitos -->
+    <div class="nav-item" onclick="navigate('hitos'); closeSidebar()">
+
+      <!-- Icono SVG de banderín que representa los hitos del proyecto -->
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+        <line x1="4" y1="22" x2="4" y2="15"/>
+      </svg>
+      Hitos
+    </div>
+
+    <!-- ÍTEM: Recursos Humanos -->
+    <div class="nav-item" onclick="navigate('recursos'); closeSidebar()">
+
+      <!-- Icono SVG de personas que representa los recursos humanos -->
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+        <path d="M16 3.13a4 4 0 010 7.75"/>
+      </svg>
+      Recursos
+    </div>
+
+    <!-- ÍTEM: Calendario -->
+    <div class="nav-item" onclick="navigate('calendario'); closeSidebar()">
+
+      <!-- Icono SVG de calendario mensual -->
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="4" width="18" height="18" rx="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      Calendario
+    </div>
+
+  </nav>
+  <!-- Fin de la navegación -->
+
+</div>
+<!-- Fin del sidebar -->
+
+
+<!-- ─── OVERLAY DEL SIDEBAR (solo móvil) ───────────────────
+     Capa oscura semitransparente que aparece detrás del sidebar
+     cuando está abierto en móvil. Al hacer clic, llama a closeSidebar().
+     JS añade/quita la clase 'active' para mostrarlo u ocultarlo.
+─────────────────────────────────────────────────────────── -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+<!-- onclick en el overlay cierra el sidebar al hacer clic fuera de él -->
+
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN — Área de contenido principal
+     Se ubica a la derecha del sidebar gracias a margin-left.
+     Contiene el topbar, la nav secundaria y las páginas.
+═══════════════════════════════════════════════════════ -->
+<div class="main">
+
+  <!-- TOPBAR: barra superior pegada al tope con el nombre de la página actual -->
+  <div class="topbar" id="topbar">
+
+    <!-- Botón hamburguesa: solo visible en móvil (display:none en desktop via CSS) -->
+    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Abrir menú">
+    <!-- aria-label da contexto al botón para lectores de pantalla (accesibilidad) -->
+
+      <!-- Icono SVG de tres líneas horizontales (símbolo universal de menú) -->
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+
+    <span id="topbar-title">Dashboard</span>
+    <!-- Texto dinámico: JS lo actualiza con el nombre de la página activa al navegar -->
+
+  </div>
+  <!-- Fin del topbar -->
+
+  <!-- NAV SECUNDARIA: links de navegación general del sitio (Inicio / Créditos) -->
+  <div class="secondary-nav">
+    <nav class="nav-links">
+    <!-- <nav> semántico para la barra de links del sitio -->
+
+      <a href="../index.html" class="nav-link active">Inicio</a>
+      <!-- Link a la página principal del sitio; clase 'active' resalta el link actual -->
+
+      <a href="../html/creditos.html" class="nav-link">Créditos</a>
+      <!-- Link a la página de créditos del proyecto -->
+
+    </nav>
+  </div>
+  <!-- Fin de la nav secundaria -->
+
+
+  <!-- ─── CONTENEDOR DE PÁGINAS ───────────────────────────
+       Solo la página con clase 'active' es visible.
+       JS añade/quita 'active' al navegar entre secciones.
+  ─────────────────────────────────────────────────────── -->
+  <div class="content">
+
+
+    <!-- ════════════════════════════════
+         PÁGINA: DASHBOARD
+         Vista de resumen general de la app.
+         Muestra stat cards y listas de elementos recientes.
+    ════════════════════════════════ -->
+    <div class="page active" id="page-dashboard">
+    <!-- id="page-dashboard" permite que navigate('dashboard') la active -->
+    <!-- 'active' inicial hace que se muestre al cargar la app -->
+
+      <!-- Encabezado de la página: título y subtítulo -->
+      <div class="page-header">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <!-- Título principal de la sección -->
+
+          <div class="page-subtitle">Resumen general de tus proyectos</div>
+          <!-- Descripción breve de qué contiene la sección -->
+        </div>
+      </div>
+
+      <!-- Grid de 4 tarjetas de estadísticas: JS inyecta el HTML con los conteos -->
+      <div class="stats-grid" id="stats-grid"></div>
+      <!-- id="stats-grid" es el target donde dashboard.js renderiza las 4 stat cards -->
+
+      <!-- Fila de dos columnas: proyectos recientes y actividades recientes -->
+      <div class="dash-row">
+
+        <!-- Tarjeta de proyectos recientes -->
+        <div class="dash-card">
+          <div class="dash-card-title">Proyectos recientes</div>
+          <!-- Título de la tarjeta de proyectos recientes -->
+
+          <div id="dash-projects"></div>
+          <!-- Contenedor donde dashboard.js inyecta la lista de los 5 proyectos más recientes -->
+        </div>
+
+        <!-- Tarjeta de actividades recientes -->
+        <div class="dash-card">
+          <div class="dash-card-title">Actividades recientes</div>
+          <!-- Título de la tarjeta de actividades recientes -->
+
+          <div id="dash-activities"></div>
+          <!-- Contenedor donde dashboard.js inyecta las últimas 5 actividades -->
+        </div>
+
+      </div>
+      <!-- Fin de dash-row -->
+
+    </div>
+    <!-- Fin de la página Dashboard -->
+
+
+    <!-- ════════════════════════════════
+         PÁGINA: PROYECTOS
+         Grid de tarjetas de proyectos con CRUD.
+    ════════════════════════════════ -->
+    <div class="page" id="page-proyectos">
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Proyectos</div>
+          <div class="page-subtitle">Gestiona tus proyectos de construcción</div>
+        </div>
+
+        <!-- Botón que abre el modal de creación de proyecto nuevo -->
+        <button class="btn-primary" onclick="openNewProyecto()">
+          <!-- Icono de más (+) indicando acción de crear -->
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Nuevo Proyecto
+        </button>
+      </div>
+
+      <!-- Grid de tarjetas de proyectos: JS inyecta una tarjeta por cada proyecto del store -->
+      <div class="projects-grid" id="projects-list"></div>
+
+    </div>
+    <!-- Fin de la página Proyectos -->
+
+
+    <!-- ════════════════════════════════
+         PÁGINA: ACTIVIDADES
+         Lista filtrable de actividades con CRUD.
+    ════════════════════════════════ -->
+    <div class="page" id="page-actividades">
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Actividades</div>
+          <div class="page-subtitle">Tareas asignadas a cada proyecto</div>
+        </div>
+
+        <!-- Botón que abre el modal de creación de actividad nueva -->
+        <button class="btn-primary" onclick="openNewActividad()">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Nueva Actividad
+        </button>
+      </div>
+
+      <!-- Fila de filtros: por proyecto y por estado de la actividad -->
+      <div class="filter-row">
+
+        <span class="filter-label">Filtrar por proyecto:</span>
+        <!-- Etiqueta descriptiva del primer filtro -->
+
+        <select class="filter-select" id="act-filter" onchange="renderActividades()">
+        <!-- onchange vuelve a renderizar la lista cada vez que se cambia el filtro -->
+          <option value="">Todos</option>
+          <!-- Las demás opciones se inyectan dinámicamente por populateSelects() en JS -->
+        </select>
+
+        <span class="filter-label" style="margin-left:8px">Estado:</span>
+        <!-- Etiqueta del segundo filtro con pequeño margen izquierdo para separarlo -->
+
+        <select class="filter-select" id="act-filter-status" onchange="renderActividades()">
+        <!-- onchange igual que el anterior: re-renderiza al cambiar el filtro -->
+          <option value="">Todos</option>
+          <option>Pendiente</option>
+          <option>En Proceso</option>
+          <option>Terminada</option>
+          <!-- Opciones estáticas porque los estados son fijos en la app -->
+        </select>
+
+      </div>
+      <!-- Fin de la fila de filtros -->
+
+      <!-- Lista de actividades: JS inyecta una fila por cada actividad filtrada -->
+      <div id="activities-list"></div>
+
+    </div>
+    <!-- Fin de la página Actividades -->
+
+
+    <!-- ════════════════════════════════
+         PÁGINA: HITOS
+         Lista de hitos del proyecto con CRUD.
+    ════════════════════════════════ -->
+    <div class="page" id="page-hitos">
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Hitos</div>
+          <div class="page-subtitle">Puntos clave de progreso del proyecto</div>
+        </div>
+
+        <!-- Botón que abre el modal de creación de hito nuevo -->
+        <button class="btn-primary" onclick="openNewHito()">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Nuevo Hito
+        </button>
+      </div>
+
+      <!-- Lista de hitos: JS inyecta una fila por cada hito del store -->
+      <div id="milestones-list"></div>
+
+    </div>
+    <!-- Fin de la página Hitos -->
+
+
+    <!-- ════════════════════════════════
+         PÁGINA: RECURSOS HUMANOS
+         Tabla del personal disponible con CRUD.
+    ════════════════════════════════ -->
+    <div class="page" id="page-recursos">
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Recursos Humanos</div>
+          <div class="page-subtitle">Personal disponible para asignar a proyectos</div>
+        </div>
+
+        <!-- Botón que abre el modal de creación de recurso nuevo -->
+        <button class="btn-primary" onclick="openNewRecurso()">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Nuevo Recurso
+        </button>
+      </div>
+
+      <!-- Contenedor de la tabla: tiene su propio scroll horizontal para no afectar la página -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <!-- Encabezado de la tabla con las columnas de datos del recurso -->
+            <tr>
+              <th>ID</th>         <!-- Cédula del recurso -->
+              <th>Nombre</th>     <!-- Nombre completo -->
+              <th>Rol</th>        <!-- Cargo o rol laboral -->
+              <th>ARL</th>        <!-- Administradora de Riesgos Laborales -->
+              <th>Salario</th>    <!-- Salario mensual -->
+              <th style="width:80px"></th>
+              <!-- Columna vacía para los botones de editar/eliminar; ancho fijo para no variar -->
+            </tr>
+          </thead>
+          <tbody id="resources-table"></tbody>
+          <!-- JS inyecta aquí una fila <tr> por cada recurso del store -->
+        </table>
+      </div>
+      <!-- Fin del table-wrap -->
+
+    </div>
+    <!-- Fin de la página Recursos -->
+
+
+    <!-- ════════════════════════════════
+         PÁGINA: CALENDARIO
+         Vista mensual de actividades en un grid de 7 columnas.
+    ════════════════════════════════ -->
+    <div class="page" id="page-calendario">
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Calendario</div>
+          <div class="page-subtitle">Cronograma visual de actividades</div>
+        </div>
+
+        <!-- Filtro de proyecto en el encabezado del calendario -->
+        <div class="cal-filter">
+          <span>Proyecto:</span>
+          <!-- Etiqueta del filtro de proyecto del calendario -->
+
+          <select id="cal-project-filter" onchange="renderCalendar()">
+          <!-- onchange re-renderiza el calendario cada vez que se cambia el proyecto filtrado -->
+            <option value="">Todos</option>
+            <!-- Las opciones de proyectos se añaden dinámicamente por populateSelects() -->
+          </select>
+        </div>
+      </div>
+      <!-- Fin del encabezado del calendario -->
+
+      <!-- Controles de navegación entre meses -->
+      <div class="cal-header">
+
+        <!-- Botón para ir al mes anterior -->
+        <button class="cal-nav-btn" onclick="changeMonth(-1)">
+        <!-- -1 indica retroceder un mes en la función de calendario -->
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"/>
+            <!-- Flecha apuntando a la izquierda -->
+          </svg>
+        </button>
+
+        <div class="cal-month" id="cal-month-label">Abril 2026</div>
+        <!-- Texto del mes y año actual; JS lo actualiza al navegar entre meses -->
+
+        <!-- Botón para ir al mes siguiente -->
+        <button class="cal-nav-btn" onclick="changeMonth(1)">
+        <!-- +1 indica avanzar un mes -->
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"/>
+            <!-- Flecha apuntando a la derecha -->
+          </svg>
+        </button>
+
+      </div>
+      <!-- Fin de los controles de navegación -->
+
+      <!-- Leyenda de colores: explica qué color corresponde a cada estado -->
+      <div class="cal-legend">
+
+        <div class="cal-legend-item">
+          <div class="cal-dot" style="background:var(--yellow)"></div>
+          <!-- Punto amarillo para estado Pendiente -->
+          Pendiente
+        </div>
+
+        <div class="cal-legend-item">
+          <div class="cal-dot" style="background:var(--blue)"></div>
+          <!-- Punto azul para estado En Proceso -->
+          En Proceso
+        </div>
+
+        <div class="cal-legend-item">
+          <div class="cal-dot" style="background:var(--green)"></div>
+          <!-- Punto verde para estado Terminada -->
+          Terminada
+        </div>
+
+      </div>
+      <!-- Fin de la leyenda -->
+
+      <!-- Grid principal del calendario con glassmorphism -->
+      <div class="cal-grid">
+
+        <!-- Fila fija de nombres de días de la semana -->
+        <div class="cal-weekdays">
+          <div class="cal-weekday">Dom</div>
+          <div class="cal-weekday">Lun</div>
+          <div class="cal-weekday">Mar</div>
+          <div class="cal-weekday">Mié</div>
+          <div class="cal-weekday">Jue</div>
+          <div class="cal-weekday">Vie</div>
+          <div class="cal-weekday">Sáb</div>
+          <!-- Los 7 días de la semana como encabezado del grid -->
+        </div>
+
+        <!-- Celdas de días: JS genera dinámicamente una celda por cada día del mes -->
+        <div class="cal-days" id="cal-days"></div>
+        <!-- calendario.js inyecta aquí las celdas con los eventos de cada día -->
+
+      </div>
+      <!-- Fin del cal-grid -->
+
+    </div>
+    <!-- Fin de la página Calendario -->
+
+
+  </div>
+  <!-- Fin del contenedor de páginas (.content) -->
+
+</div>
+<!-- Fin del área principal (.main) -->
+
+
+<!-- ═══════════════════════════════════════════════════════
+     TOAST CONTAINER
+     Contenedor fijo en la esquina superior derecha donde
+     aparecen las notificaciones flotantes temporales.
+     JS añade elementos <div class="toast"> aquí.
+═══════════════════════════════════════════════════════ -->
+<div class="toast-container" id="toast-container"></div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     MODALES — Ventanas de diálogo superpuestas
+     Cada modal tiene un overlay oscuro (modal-overlay) que
+     cubre toda la pantalla y un cuadro central (modal).
+     JS añade la clase 'open' al overlay para mostrarlos.
+═══════════════════════════════════════════════════════ -->
+
+
+<!-- ─────────────────────────────────────────────────────
+     MODAL: Crear / Editar Proyecto
+     Formulario con nombre, descripción y fechas.
+     Validación: fecha fin ≥ fecha inicio (via validaciones.js y proyectos.js)
+───────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-proyecto">
+<!-- id="modal-proyecto" permite abrirlo con openModal('modal-proyecto') -->
+
+  <div class="modal">
+  <!-- Cuadro central del modal con glassmorphism y animación de entrada -->
+
+    <!-- Encabezado del modal: título dinámico + botón de cierre -->
+    <div class="modal-header">
+      <div class="modal-title" id="modal-proyecto-title">Nuevo Proyecto</div>
+      <!-- JS cambia el texto entre "Nuevo Proyecto" y "Editar Proyecto" según el modo -->
+
+      <button class="modal-close" onclick="closeModal('modal-proyecto')">✕</button>
+      <!-- Botón X que cierra el modal quitando la clase 'open' -->
+    </div>
+
+    <!-- Campo: nombre del proyecto (obligatorio) -->
+    <div class="form-group">
+      <label class="form-label required">Nombre</label>
+      <!-- 'required' añade un asterisco rojo vía CSS ::after -->
+
+      <input type="text" class="form-input" id="p-nombre" placeholder="Nombre del proyecto" maxlength="80">
+      <!-- maxlength="80" limita la longitud para evitar nombres demasiado largos -->
+    </div>
+
+    <!-- Campo: descripción del proyecto (opcional) -->
+    <div class="form-group">
+      <label class="form-label">Descripción</label>
+      <textarea class="form-textarea" id="p-desc" placeholder="Descripción del proyecto" maxlength="300"></textarea>
+      <!-- textarea permite texto multilínea; maxlength="300" limita la descripción -->
+    </div>
+
+    <!-- Fila con dos columnas: fecha inicio y fecha fin -->
+    <div class="form-row">
+
+      <!-- Campo: fecha de inicio (obligatorio) -->
+      <div class="form-group">
+        <label class="form-label required">Fecha Inicio</label>
+        <input type="date" class="form-input" id="p-inicio" onchange="actualizarMinFechaFin()">
+        <!-- onchange llama a actualizarMinFechaFin() en validaciones.js para sincronizar el mínimo de la fecha fin -->
+      </div>
+
+      <!-- Campo: fecha de fin (obligatorio, debe ser ≥ fecha inicio) -->
+      <div class="form-group">
+        <label class="form-label required">Fecha Fin</label>
+        <input type="date" class="form-input" id="p-fin">
+        <!-- El atributo min se asigna dinámicamente por JS al cambiar la fecha de inicio -->
+
+        <small class="field-hint" id="p-fin-hint">La fecha fin no puede ser anterior a la fecha de inicio.</small>
+        <!-- Mensaje de advertencia oculto por defecto; JS lo muestra si la fecha es inválida -->
+      </div>
+
+    </div>
+    <!-- Fin de la fila de fechas -->
+
+    <!-- Campo oculto: almacena el ID del proyecto al editar (vacío al crear) -->
+    <input type="hidden" id="p-edit-id">
+    <!-- Si tiene valor, saveProyecto() sabe que debe actualizar en vez de crear -->
+
+    <!-- Botón de submit: JS cambia su texto entre "Crear Proyecto" y "Guardar Cambios" -->
+    <button class="btn-submit" id="btn-save-proyecto" onclick="saveProyecto()">Crear Proyecto</button>
+
+  </div>
+</div>
+<!-- Fin del modal de proyecto -->
+
+
+<!-- ─────────────────────────────────────────────────────
+     MODAL: Crear / Editar Actividad
+     Formulario con nombre, proyecto, responsable, fecha,
+     duración y estado.
+     Validación: no se puede crear con estado "Terminada".
+───────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-actividad">
+
+  <div class="modal">
+
+    <div class="modal-header">
+      <div class="modal-title" id="modal-actividad-title">Nueva Actividad</div>
+      <!-- JS alterna entre "Nueva Actividad" y "Editar Actividad" -->
+
+      <button class="modal-close" onclick="closeModal('modal-actividad')">✕</button>
+    </div>
+
+    <!-- Campo: nombre de la actividad (obligatorio) -->
+    <div class="form-group">
+      <label class="form-label required">Nombre</label>
+      <input type="text" class="form-input" id="a-nombre" placeholder="Nombre de la actividad" maxlength="80">
+    </div>
+
+    <!-- Campo: proyecto al que pertenece (obligatorio, select poblado por JS) -->
+    <div class="form-group">
+      <label class="form-label required">Proyecto</label>
+      <select class="form-select" id="a-proyecto">
+        <option value="">Seleccionar proyecto</option>
+        <!-- Las opciones de proyectos se añaden dinámicamente por populateSelects() -->
+      </select>
+    </div>
+
+    <!-- Campo: responsable de la actividad (opcional, select poblado por JS) -->
+    <div class="form-group">
+      <label class="form-label">Responsable</label>
+      <select class="form-select" id="a-responsable">
+        <option value="">Seleccionar recurso</option>
+        <!-- Las opciones de recursos se añaden dinámicamente por populateSelects() -->
+      </select>
+    </div>
+
+    <!-- Fila con dos columnas: fecha inicio y duración -->
+    <div class="form-row">
+
+      <!-- Campo: fecha de inicio de la actividad (obligatorio) -->
+      <div class="form-group">
+        <label class="form-label required">Fecha Inicio</label>
+        <input type="date" class="form-input" id="a-inicio">
+      </div>
+
+      <!-- Campo: duración en días (mínimo 1) -->
+      <div class="form-group">
+        <label class="form-label">Duración (días)</label>
+        <input type="number" class="form-input" id="a-duracion" value="1" min="1" max="365">
+        <!-- min="1" impide valores de 0 o negativos; max="365" como límite razonable -->
+      </div>
+
+    </div>
+
+    <!-- Campo: estado de la actividad -->
+    <div class="form-group">
+      <label class="form-label">Estado</label>
+      <select class="form-select" id="a-estado">
+        <option>Pendiente</option>
+        <option>En Proceso</option>
+        <option>Terminada</option>
+        <!-- "Terminada" está disponible pero validaciones.js y actividades.js la bloquean al crear -->
+      </select>
+
+      <!-- Mensaje de advertencia cuando se intenta crear como "Terminada" -->
+      <small class="field-hint" id="a-estado-hint" style="display:none">
+        ⚠️ No puedes crear una actividad directamente como "Terminada". Inicia con Pendiente o En Proceso.
+      </small>
+      <!-- display:none inline para asegurar que esté oculto aunque el CSS no cargue -->
+    </div>
+
+    <!-- Campo oculto: almacena el ID de la actividad al editar -->
+    <input type="hidden" id="a-edit-id">
+
+    <!-- Botón de submit: JS alterna su texto entre crear y editar -->
+    <button class="btn-submit" id="btn-save-actividad" onclick="saveActividad()">Crear Actividad</button>
+
+  </div>
+</div>
+<!-- Fin del modal de actividad -->
+
+
+<!-- ─────────────────────────────────────────────────────
+     MODAL: Crear / Editar Hito
+     Formulario con nombre, descripción, proyecto y estado.
+───────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-hito">
+
+  <div class="modal">
+
+    <div class="modal-header">
+      <div class="modal-title" id="modal-hito-title">Nuevo Hito</div>
+      <button class="modal-close" onclick="closeModal('modal-hito')">✕</button>
+    </div>
+
+    <!-- Campo: nombre del hito (obligatorio) -->
+    <div class="form-group">
+      <label class="form-label required">Nombre</label>
+      <input type="text" class="form-input" id="h-nombre" placeholder="Nombre del hito" maxlength="80">
+    </div>
+
+    <!-- Campo: descripción del hito (opcional) -->
+    <div class="form-group">
+      <label class="form-label">Descripción</label>
+      <textarea class="form-textarea" id="h-desc" placeholder="Descripción del hito" maxlength="300"></textarea>
+    </div>
+
+    <!-- Campo: proyecto al que pertenece el hito (obligatorio) -->
+    <div class="form-group">
+      <label class="form-label required">Proyecto</label>
+      <select class="form-select" id="h-proyecto">
+        <option value="">Seleccionar proyecto</option>
+        <!-- Opciones inyectadas por populateSelects() -->
+      </select>
+    </div>
+
+    <!-- Campo: estado del hito (Pendiente o Cumplido) -->
+    <div class="form-group">
+      <label class="form-label">Estado</label>
+      <select class="form-select" id="h-estado">
+        <option>Pendiente</option>
+        <option>Cumplido</option>
+        <!-- Solo dos estados posibles para hitos, a diferencia de actividades -->
+      </select>
+    </div>
+
+    <!-- Campo oculto: almacena el ID del hito al editar -->
+    <input type="hidden" id="h-edit-id">
+
+    <button class="btn-submit" id="btn-save-hito" onclick="saveHito()">Crear Hito</button>
+
+  </div>
+</div>
+<!-- Fin del modal de hito -->
+
+
+<!-- ─────────────────────────────────────────────────────
+     MODAL: Crear / Editar Recurso Humano
+     Formulario con todos los datos del personal.
+     Validación: fecha de nacimiento máximo 31-dic-2010.
+───────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-recurso">
+
+  <div class="modal">
+
+    <div class="modal-header">
+      <div class="modal-title" id="modal-recurso-title">Nuevo Recurso</div>
+      <button class="modal-close" onclick="closeModal('modal-recurso')">✕</button>
+    </div>
+
+    <!-- Fila: identificación y nombre completo -->
+    <div class="form-row">
+
+      <!-- Campo: ID / cédula del recurso (obligatorio, editable solo al crear) -->
+      <div class="form-group">
+        <label class="form-label required">Identificación</label>
+        <input type="text" class="form-input" id="r-id" placeholder="Número de ID" maxlength="15">
+        <!-- JS pone readOnly=true al editar para que la cédula no cambie -->
+      </div>
+
+      <!-- Campo: nombre completo (obligatorio) -->
+      <div class="form-group">
+        <label class="form-label required">Nombre completo</label>
+        <input type="text" class="form-input" id="r-nombre" placeholder="Nombre completo" maxlength="80">
+      </div>
+
+    </div>
+
+    <!-- Fila: fecha de nacimiento y tipo de sangre -->
+    <div class="form-row">
+
+      <!-- Campo: fecha de nacimiento (máximo 2010, validado por validaciones.js y recursos.js) -->
+      <div class="form-group">
+        <label class="form-label">Fecha de Nacimiento</label>
+        <input type="date" class="form-input" id="r-nacimiento" onchange="validarNacimiento()">
+        <!-- onchange llama a validarNacimiento() en validaciones.js para validar el año en tiempo real -->
+        <!-- Los atributos max y min se asignan dinámicamente por JS al abrir el modal -->
+
+        <small class="field-hint" id="r-nac-hint">Solo se permiten personas nacidas hasta el año 2008.</small>
+        <!-- Hint que JS muestra si el usuario intenta ingresar una fecha posterior a 2010 -->
+      </div>
+
+      <!-- Campo: tipo de sangre (select con las 8 opciones posibles) -->
+      <div class="form-group">
+        <label class="form-label">Tipo de Sangre</label>
+        <select class="form-select" id="r-sangre">
+          <option value="">Seleccionar</option>
+          <option>A+</option><option>A-</option>
+          <option>B+</option><option>B-</option>
+          <option>AB+</option><option>AB-</option>
+          <option>O+</option><option>O-</option>
+          <!-- Los 8 tipos de sangre del sistema ABO + Rh -->
+        </select>
+      </div>
+
+    </div>
+
+    <!-- Fila: ARL y género -->
+    <div class="form-row">
+
+      <!-- Campo: nombre de la ARL (opcional, texto libre) -->
+      <div class="form-group">
+        <label class="form-label">ARL</label>
+        <input type="text" class="form-input" id="r-arl" placeholder="Ej: SURA" maxlength="40">
+      </div>
+
+      <!-- Campo: género (select con tres opciones) -->
+      <div class="form-group">
+        <label class="form-label">Género</label>
+        <select class="form-select" id="r-genero">
+          <option value="">Seleccionar</option>
+          <option>Masculino</option>
+          <option>Femenino</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+    </div>
+
+    <!-- Fila: salario y rol laboral -->
+    <div class="form-row">
+
+      <!-- Campo: salario mensual (número, mínimo 0) -->
+      <div class="form-group">
+        <label class="form-label">Salario</label>
+        <input type="number" class="form-input" id="r-salario" value="0" min="0">
+        <!-- min="0" impide salarios negativos -->
+      </div>
+
+      <!-- Campo: rol laboral (obligatorio, select con los roles disponibles) -->
+      <div class="form-group">
+        <label class="form-label required">Rol</label>
+        <select class="form-select" id="r-rol">
+          <option value="">Seleccionar</option>
+          <option>Ingeniero</option>
+          <option>Arquitecto</option>
+          <option>Obrero</option>
+          <option>Supervisor</option>
+          <option>Administrador</option>
+          <option>Diseñador</option>
+          <option>Técnico</option>
+        </select>
+      </div>
+
+    </div>
+
+    <!-- Campo oculto: almacena el ID del recurso al editar -->
+    <input type="hidden" id="r-edit-id">
+
+    <button class="btn-submit" id="btn-save-recurso" onclick="saveRecurso()">Crear Recurso</button>
+
+  </div>
+</div>
+<!-- Fin del modal de recurso -->
+
+
+<!-- ─────────────────────────────────────────────────────
+     MODAL: Confirmar Eliminación
+     Diálogo pequeño que aparece al intentar eliminar
+     cualquier elemento para pedir confirmación.
+───────────────────────────────────────────────────── -->
+<div class="modal-overlay" id="modal-confirm">
+
+  <div class="modal confirm-modal">
+  <!-- confirm-modal aplica un ancho más pequeño y text-align:center definidos en modals.css -->
+
+    <div class="confirm-icon">🗑️</div>
+    <!-- Emoji de basurero como indicador visual del peligro de la acción -->
+
+    <div class="confirm-title">¿Eliminar este elemento?</div>
+    <!-- Título fijo del diálogo de confirmación -->
+
+    <div class="confirm-msg" id="confirm-msg">Esta acción no se puede deshacer.</div>
+    <!-- Mensaje dinámico: JS actualiza el texto según qué se está eliminando -->
+
+    <!-- Fila de botones: Cancelar a la izquierda, Eliminar a la derecha -->
+    <div class="confirm-btns">
+
+      <button class="btn-cancel" onclick="closeModal('modal-confirm')">Cancelar</button>
+      <!-- Cancelar cierra el modal sin hacer nada -->
+
+      <button class="btn-danger" id="confirm-ok-btn">Eliminar</button>
+      <!-- El onclick de este botón lo asigna confirmDelete() en ui.js dinámicamente -->
+
+    </div>
+
+  </div>
+</div>
+<!-- Fin del modal de confirmación -->
+
+
+<!-- ═══════════════════════════════════════════════════════
+     SCRIPTS — El orden de carga es crítico
+     store.js debe ir primero porque todos los demás dependen
+     de sus variables y funciones globales.
+     main.js va al último porque inicializa todo lo anterior.
+═══════════════════════════════════════════════════════ -->
+
+<script src="../js/store.js"></script>
+<!-- Datos globales del store, funciones utilitarias (estadoBadge, resetForm, animateCard) y populateSelects -->
+
+<script src="../js/ui.js"></script>
+<!-- Navegación entre páginas, apertura/cierre de modales, toasts y diálogo de confirmación -->
+
+<script src="../js/dashboard.js"></script>
+<!-- Función renderDashboard: stat cards y listas de proyectos/actividades recientes -->
+
+<script src="../js/proyectos.js"></script>
+<!-- CRUD de proyectos con validación de fechas (fecha fin ≥ fecha inicio) -->
+
+<script src="../js/actividades.js"></script>
+<!-- CRUD de actividades con validación de estado al crear (no puede ser "Terminada") -->
+
+<script src="../js/hitos.js"></script>
+<!-- CRUD de hitos: renderHitos, openNewHito, saveHito, editHito, deleteHito -->
+
+<script src="../js/recursos.js"></script>
+<!-- CRUD de recursos con validación de fecha de nacimiento (máximo año 2010) -->
+
+<script src="../js/calendario.js"></script>
+<!-- Función renderCalendar: construye el grid mensual con los eventos de las actividades -->
+
+<script src="../js/main.js"></script>
+<!-- Inicialización: DOMContentLoaded, initModalOverlayClose, populateSelects y navigate('dashboard') -->
+
+<script src="../js/validaciones.js"></script>
+<!-- Funciones de validación de formularios y control del sidebar móvil (hamburger) -->
+<!-- Carga al final para que todas las funciones de ui.js (como toast) ya estén disponibles -->
+
+</body>
+</html>

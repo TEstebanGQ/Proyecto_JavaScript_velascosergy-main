@@ -1,0 +1,186 @@
+/* ═══════════════════════════════════
+   modals.css
+   Estilos de: modales, formularios dentro de modales,
+   toasts (notificaciones) y diálogo de confirmación.
+   Los modales usan glassmorphism para integrarse
+   con el fondo de luces del diseño.
+═══════════════════════════════════ */
+
+/* ══════════════════════════
+   MODAL OVERLAY
+   Fondo oscuro semitransparente que aparece detrás del modal.
+   Controla la visibilidad con las clases open / sin clase.
+══════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);              /* Oscurece el fondo de la app */
+  backdrop-filter: blur(4px);               /* Difumina el contenido detrás */
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  opacity: 0;                               /* Invisible por defecto */
+  pointer-events: none;                     /* No interactuable cuando está cerrado */
+  transition: opacity 0.2s;
+}
+/* Clase .open: hace visible e interactuable el overlay */
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+
+/* ══════════════════════════
+   MODAL (ventana de diálogo)
+   Caja central con glassmorphism y animación de entrada.
+══════════════════════════ */
+.modal {
+  background: rgba(13,20,35,0.92);          /* Fondo oscuro translúcido */
+  backdrop-filter: blur(30px);             /* Efecto cristal fuerte */
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(0,212,255,0.2);   /* Borde con tono de acento */
+  border-radius: 14px;
+  padding: 26px;
+  width: 500px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  /* Estado inicial: reducido y desplazado hacia abajo */
+  transform: scale(0.93) translateY(16px);
+  transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1);  /* Animación con rebote */
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(0,212,255,0.05);
+}
+/* Estado abierto: tamaño y posición normales */
+.modal-overlay.open .modal { transform: scale(1) translateY(0); }
+
+/* ── Cabecera del modal: título + botón cerrar ── */
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-lite);
+}
+.modal-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+
+/* Botón X para cerrar el modal */
+.modal-close {
+  background: var(--surface2);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  width: 30px; height: 30px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-dim);
+  font-size: 16px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.modal-close:hover { background: rgba(239,68,68,0.15); color: var(--red); border-color: var(--red); }
+
+/* ══════════════════════════
+   FORMULARIOS dentro de modales
+   Grupos de campo, labels, inputs, selects y textareas.
+══════════════════════════ */
+
+/* Fila con dos campos lado a lado */
+.form-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* Grupo de campo: label + input */
+.form-group { margin-bottom: 14px; }
+
+/* Label de campo (en mayúsculas pequeñas) */
+.form-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+/* Asterisco rojo en labels requeridos */
+.form-label.required::after { content: ' *'; color: var(--accent-1); }
+
+/* Estilos base para inputs, selects y textareas */
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  background: rgba(18,28,50,0.9);        /* Fondo oscuro translúcido */
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  color: var(--text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+/* Foco: borde de acento + sombra luminosa */
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--accent-1);
+  box-shadow: 0 0 0 3px var(--orange-bg), 0 0 15px rgba(0,212,255,0.1);
+}
+
+/* Opciones del select con fondo consistente */
+.form-select option    { background: #0d1420; color: var(--text); }
+
+/* Textarea con resize vertical y altura mínima */
+.form-textarea         { resize: vertical; min-height: 80px; }
+
+/* ══════════════════════════
+   TOAST (notificaciones flotantes)
+   Aparecen en la esquina superior derecha y
+   desaparecen automáticamente después de 3 segundos.
+══════════════════════════ */
+
+/* Contenedor que apila los toasts verticalmente */
+.toast-container {
+  position: fixed;
+  top: 20px; right: 20px;
+  z-index: 2000;
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+/* Toast individual */
+.toast {
+  background: rgba(13,20,35,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0,212,255,0.25);
+  color: var(--text);
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg), 0 0 20px rgba(0,212,255,0.1);
+  animation: toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1);   /* Entra desde la derecha con rebote */
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* Toast de éxito (verde) */
+.toast.success { background: rgba(34,197,94,0.9); color: #fff; border-color: transparent; }
+
+/* Toast de error (rojo) */
+.toast.error   { background: rgba(239,68,68,0.9); color: #fff; border-color: transparent; }
+
+/* Animación de entrada del toast: desliza desde la derecha */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(60px) scale(0.9); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+/* Animación de salida del toast: desliza hacia la derecha */
+@keyframes toastOut {
+  to { opacity: 0; transform: translateX(60px) scale(0.9); }
+}
+
+/* ══════════════════════════
+   CONFIRM DIALOG
+   Modal pequeño centrado para confirmar eliminaciones.
+   Muestra ícono, título, mensaje y dos botones.
+══════════════════════════ */
+.confirm-modal { width: 360px; text-align: center; }
+.confirm-icon  { font-size: 38px; margin-bottom: 12px; }                          /* Ícono grande central */
+.confirm-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }         /* Título del diálogo */
+.confirm-msg   { font-size: 0.84rem; color: var(--text-dim); margin-bottom: 22px; line-height: 1.5; }  /* Mensaje descriptivo */
+.confirm-btns  { display: flex; gap: 10px; }                                       /* Fila de botones Cancelar / Eliminar */

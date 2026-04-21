@@ -1,0 +1,151 @@
+/* ═══════════════════════════════════
+   calendar.css
+   Estilos del Calendario mensual:
+   - Cabecera con navegación de mes
+   - Leyenda de colores de estado
+   - Grid de días con eventos coloreados
+   Usa glassmorphism para el grid principal.
+═══════════════════════════════════ */
+
+/* ── Cabecera del calendario: flechas + nombre del mes ── */
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+/* Botones de navegación < > para cambiar mes */
+.cal-nav-btn {
+  background: var(--surface2);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-dim);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+/* Hover: cambia a color de acento */
+.cal-nav-btn:hover { background: var(--accent-1); color: #fff; border-color: var(--accent-1); box-shadow: 0 0 12px rgba(0,212,255,0.3); }
+.cal-nav-btn svg  { width: 14px; height: 14px; }
+
+/* Texto del mes y año actual (ej: "Abril 2026") */
+.cal-month { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+
+/* Contenedor del filtro de proyecto (arriba a la derecha) */
+.cal-filter {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--text-muted);
+}
+
+/* Select de filtro por proyecto */
+.cal-filter select {
+  background: var(--surface2);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.cal-filter select:focus { border-color: var(--accent-1); }
+
+/* Leyenda de colores debajo del header (Pendiente / En Proceso / Terminada) */
+.cal-legend      { display: flex; gap: 16px; margin-bottom: 16px; }
+.cal-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+
+/* Punto de color circular de la leyenda */
+.cal-dot         { width: 10px; height: 10px; border-radius: 50%; }
+
+/* ── Grid del calendario ── */
+.cal-grid {
+  background: var(--surface);
+  backdrop-filter: blur(20px);         /* Glassmorphism sobre el fondo de luces */
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* Fila de nombres de días de la semana (Dom, Lun, Mar...) */
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7,1fr);
+  border-bottom: 1px solid var(--border);
+}
+.cal-weekday {
+  padding: 10px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(3,7,16,0.5);    /* Cabecera más oscura para resaltarla */
+}
+
+/* Grid de celdas de días del mes */
+.cal-days { display: grid; grid-template-columns: repeat(7,1fr); }
+
+/* Celda de un día */
+.cal-day {
+  min-height: 80px;
+  padding: 6px;
+  border-right: 1px solid var(--border-lite);
+  border-bottom: 1px solid var(--border-lite);
+  position: relative;
+  transition: background 0.15s;
+}
+.cal-day:nth-child(7n) { border-right: none; }   /* Última columna sin borde derecho */
+.cal-day:hover         { background: rgba(0,212,255,0.04); }   /* Hover muy sutil */
+
+/* Número del día dentro de la celda */
+.cal-day-num {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  margin-bottom: 4px;
+}
+
+/* El día de hoy resaltado con el color de acento */
+.cal-day-num.today {
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0,212,255,0.4);   /* Brillo del día actual */
+}
+
+/* Etiqueta de evento dentro de la celda del calendario */
+.cal-event {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  animation: eventPop 0.25s ease;    /* Animación de aparición */
+  transition: transform 0.15s, opacity 0.15s;
+}
+.cal-event:hover { transform: scale(1.04); opacity: 0.85; }
+
+/* Animación de aparición "pop" para los eventos */
+@keyframes eventPop {
+  from { opacity: 0; transform: scaleY(0.5); }
+  to   { opacity: 1; transform: scaleY(1); }
+}
+
+/* Colores de los eventos según estado de la actividad */
+.cal-event.pendiente  { background: var(--yellow-light); color: var(--yellow); }   /* Amarillo: pendiente */
+.cal-event.en-proceso { background: var(--blue-light);   color: var(--blue); }     /* Azul: en proceso */
+.cal-event.terminada  { background: var(--green-light);  color: var(--green); }    /* Verde: terminada */

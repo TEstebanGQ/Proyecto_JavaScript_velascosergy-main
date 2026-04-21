@@ -1,0 +1,711 @@
+/* ═══════════════════════════════════════════
+   CampusBuild — style1.css
+   Contiene: variables globales, reset, fondo animado,
+   layout principal, sidebar, topbar, botones, badges,
+   progress bar, tabla, filtros y responsive.
+   Diseño: glassmorphism oscuro con luces orb animadas.
+═══════════════════════════════════════════ */
+
+/* ══════════════════════════
+   VARIABLES GLOBALES
+   Define todos los colores, tamaños y sombras
+   usados en toda la aplicación.
+══════════════════════════ */
+:root {
+  /* ── Fondos principales (escala oscura azul-negra) ── */
+  --bg:              #050a14;        /* Fondo base de la app, casi negro azulado */
+  --bg-deep:         #030710;        /* Fondo más profundo para sidebar y topbar */
+  --surface:         rgba(13,20,35,0.75);   /* Superficie de cards con transparencia */
+  --surface2:        rgba(18,28,50,0.8);    /* Superficie secundaria, hover de inputs */
+  --surface3:        rgba(25,38,65,0.85);   /* Superficie terciaria, hover de botones */
+
+  /* ── Bordes con transparencia ── */
+  --border:          rgba(255,255,255,0.07);   /* Borde sutil estándar */
+  --border-lite:     rgba(255,255,255,0.04);   /* Borde muy sutil para separadores */
+  --border2:         rgba(255,255,255,0.1);    /* Borde con más contraste */
+  --border-accent:   rgba(0,212,255,0.2);      /* Borde con acento cian para elementos activos */
+
+  /* ── Texto ── */
+  --text:            #e2e8f4;        /* Texto principal, casi blanco */
+  --text-dim:        #8a9bb8;        /* Texto secundario, gris azulado */
+  --text-muted:      #4a5568;        /* Texto apagado, labels y metadatos */
+
+  /* ── Acento principal: gradiente cian → violeta ── */
+  --accent-1:        #00d4ff;        /* Cian brillante para elementos activos */
+  --accent-2:        #7c3aed;        /* Violeta para el degradado del acento */
+  --orange:          #00d4ff;        /* Mantiene compatibilidad con clases .btn-primary */
+  --orange-hover:    #00b8e0;        /* Hover del acento principal */
+  --orange-bg:       rgba(0,212,255,0.12);     /* Fondo translúcido del acento */
+  --orange-border:   rgba(0,212,255,0.25);     /* Borde del acento */
+
+  /* ── Colores de iconos en stat cards ── */
+  --icon-orange-bg:  rgba(0,212,255,0.15);
+  --icon-orange:     #00d4ff;
+  --icon-blue-bg:    rgba(129,140,248,0.15);
+  --icon-blue:       #818cf8;
+  --icon-red-bg:     rgba(239,68,68,0.15);
+  --icon-red:        #ef4444;
+  --icon-teal-bg:    rgba(20,184,166,0.15);
+  --icon-teal:       #14b8a6;
+
+  /* ── Colores de estado (actividades, hitos) ── */
+  --green:           #22c55e;
+  --green-light:     rgba(34,197,94,0.15);
+  --blue:            #60a5fa;
+  --blue-light:      rgba(96,165,250,0.15);
+  --yellow:          #f59e0b;
+  --yellow-light:    rgba(245,158,11,0.15);
+  --red:             #ef4444;
+  --red-light:       rgba(239,68,68,0.15);
+
+  /* ── Colores de badges (etiquetas de estado) ── */
+  --badge-yellow:    #f59e0b;
+  --badge-yellow-bg: rgba(245,158,11,0.15);
+  --badge-blue:      #60a5fa;
+  --badge-blue-bg:   rgba(96,165,250,0.15);
+  --badge-green:     #22c55e;
+  --badge-green-bg:  rgba(34,197,94,0.15);
+  --badge-orange:    #f97316;
+  --badge-orange-bg: rgba(249,115,22,0.15);
+
+  /* ── Colores de barras de progreso ── */
+  --bar-yellow:      #f59e0b;
+  --bar-blue:        #60a5fa;
+  --bar-green:       #22c55e;
+
+  /* ── Medidas de layout ── */
+  --sidebar-w:  230px;           /* Ancho fijo del sidebar izquierdo */
+  --topbar-h:   54px;            /* Altura de la barra superior */
+  --radius:     12px;            /* Radio de borde para cards principales */
+  --radius-sm:  8px;             /* Radio de borde para elementos pequeños */
+
+  /* ── Sombras ── */
+  --shadow:     0 4px 24px rgba(0,0,0,0.5);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,0.7);
+}
+
+/* ══════════════════════════
+   RESET GLOBAL
+   Elimina márgenes/paddings por defecto del navegador
+   y aplica box-sizing para un layout predecible.
+══════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+/* ══════════════════════════
+   BODY
+   Fondo oscuro base, tipografía principal y layout flex.
+══════════════════════════ */
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: var(--bg);                /* Fondo oscuro azulado */
+  color: var(--text);
+  display: flex;
+  min-height: 100vh;
+  font-size: 14px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════
+   FONDO ANIMADO — LUCES ORB
+   Crea el efecto de esferas de luz flotantes (orbs) que
+   se mueven suavemente en el fondo de toda la app.
+   Usa position:fixed para cubrir toda la pantalla.
+══════════════════════════ */
+
+/* Contenedor que abarca toda la pantalla detrás del contenido */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;   /* No interfiere con clics del usuario */
+
+  /* Múltiples gradientes radiales simulando "luces" de colores */
+  background:
+    radial-gradient(ellipse 600px 500px at 0% 0%,   rgba(0,212,255,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 400px at 100% 30%, rgba(124,58,237,0.1) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 50% 100%, rgba(6,182,212,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 350px 300px at 80% 10%,  rgba(129,140,248,0.07) 0%, transparent 70%);
+}
+
+/* Orb 1 — cian, esquina superior izquierda, movimiento lento */
+body::after {
+  content: '';
+  position: fixed;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  top: -150px; left: -150px;
+  background: radial-gradient(circle, rgba(0,212,255,0.15), transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  animation: orbFloat1 12s ease-in-out infinite;  /* Animación suave infinita */
+}
+
+/* Animación del orb: traslación suave en X e Y */
+@keyframes orbFloat1 {
+  0%, 100% { transform: translate(0, 0); }
+  33%       { transform: translate(40px, -30px); }
+  66%       { transform: translate(-20px, 30px); }
+}
+
+/* Clase extra para el orb violeta (agregado via JS en main.js) */
+.orb-purple {
+  position: fixed;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  bottom: -100px; right: -100px;
+  background: radial-gradient(circle, rgba(124,58,237,0.12), transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  animation: orbFloat2 15s ease-in-out infinite;
+}
+
+@keyframes orbFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  50%       { transform: translate(-30px, -40px); }
+}
+
+/* Asegura que todos los elementos principales queden ENCIMA del fondo */
+.sidebar, .main { position: relative; z-index: 1; }
+
+/* ══════════════════════════
+   SIDEBAR
+   Panel de navegación lateral izquierdo con efecto
+   glassmorphism (cristal translúcido con blur).
+══════════════════════════ */
+.sidebar {
+  width: var(--sidebar-w);
+  background: rgba(3,7,16,0.82);        /* Fondo semi-transparente oscuro */
+  backdrop-filter: blur(24px);           /* Desenfoque del fondo → efecto cristal */
+  -webkit-backdrop-filter: blur(24px);   /* Soporte para Safari */
+  border-right: 1px solid var(--border-accent);  /* Borde cian tenue a la derecha */
+  display: flex;
+  flex-direction: column;
+  position: fixed;                        /* Fijo, no se mueve al hacer scroll */
+  top: 0; left: 0;
+  height: 100vh;
+  z-index: 100;
+}
+
+/* ── Logo / header del sidebar ── */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Cuadrado del icono del logo con gradiente */
+.logo-icon {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  box-shadow: 0 0 20px rgba(0,212,255,0.25);   /* Brillo suave debajo del logo */
+}
+
+.logo-name { font-size: 0.92rem; font-weight: 700; color: var(--text); }
+.logo-sub  { font-size: 0.65rem; color: var(--text-muted); margin-top: 1px; }
+
+/* Contenedor de los nav items */
+.nav {
+  flex: 1;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+/* Cada ítem del menú de navegación */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font-size: 0.84rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;         /* Borde invisible por defecto */
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.nav-item svg {
+  width: 16px; height: 16px;
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+}
+
+/* Hover: fondo translúcido sutil */
+.nav-item:hover        { background: rgba(0,212,255,0.07); color: var(--text); border-color: rgba(0,212,255,0.1); }
+.nav-item:hover svg    { opacity: 1; }
+
+/* Estado activo: gradiente de acento cian→violeta */
+.nav-item.active {
+  background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(124,58,237,0.15));
+  color: var(--accent-1);
+  border-color: rgba(0,212,255,0.3);
+}
+.nav-item.active svg { opacity: 1; }
+
+/* ══════════════════════════
+   LAYOUT PRINCIPAL
+   El .main empuja su contenido a la derecha del sidebar.
+══════════════════════════ */
+.main {
+  margin-left: var(--sidebar-w);    /* Desplaza el contenido para no tapar el sidebar fijo */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Barra superior ── */
+.topbar {
+  height: var(--topbar-h);
+  background: rgba(3,7,16,0.7);           /* Semi-transparente para ver las luces del fondo */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-accent);
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  position: sticky;                         /* Se queda pegado al top al hacer scroll */
+  top: 0;
+  z-index: 90;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+/* Área de contenido de cada página */
+.content {
+  flex: 1;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ══════════════════════════
+   PÁGINAS
+   Solo la página activa es visible (display: contents).
+══════════════════════════ */
+.page         { display: none; }
+.page.active  { display: contents; }   /* "contents" hereda el gap del flex parent */
+
+/* ══════════════════════════
+   ENCABEZADO DE SECCIÓN
+   Título + subtítulo + botón de acción (Nuevo...)
+══════════════════════════ */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.page-title    { font-size: 1.4rem; font-weight: 800; color: var(--text); }
+.page-subtitle { font-size: 0.8rem; color: var(--text-dim); margin-top: 3px; }
+
+/* ══════════════════════════
+   BOTONES
+══════════════════════════ */
+
+/* Botón primario: fondo de acento con gradiente */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s, transform 0.1s;
+  box-shadow: 0 0 20px rgba(0,212,255,0.2);   /* Brillo del botón */
+}
+.btn-primary svg { width: 13px; height: 13px; }
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+/* Botón de submit dentro de modales */
+.btn-submit {
+  width: 100%;
+  padding: 11px;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 6px;
+  transition: opacity 0.15s;
+  box-shadow: 0 0 20px rgba(0,212,255,0.15);
+}
+.btn-submit:hover { opacity: 0.88; }
+
+/* Botón cancelar en modales */
+.btn-cancel {
+  flex: 1;
+  padding: 10px;
+  background: var(--surface2);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.btn-cancel:hover { background: var(--surface3); color: var(--text); }
+
+/* Botón de acción destructiva (eliminar) */
+.btn-danger {
+  flex: 1;
+  padding: 10px;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.btn-danger:hover { background: #dc2626; }
+
+/* Botón de ícono pequeño (editar / eliminar en filas) */
+.icon-btn {
+  width: 32px; height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-dim);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  backdrop-filter: blur(8px);
+}
+.icon-btn svg           { width: 14px; height: 14px; }
+.icon-btn:hover         { background: rgba(0,212,255,0.1); color: var(--accent-1); border-color: var(--border-accent); }
+.icon-btn.danger:hover  { background: var(--red-light); color: var(--red); border-color: var(--red); }
+
+/* ══════════════════════════
+   BADGES (etiquetas de estado)
+   Pequeñas píldoras de color para indicar
+   el estado de actividades e hitos.
+══════════════════════════ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge-yellow  { background: var(--badge-yellow-bg);  color: var(--badge-yellow); }
+.badge-blue    { background: var(--badge-blue-bg);    color: var(--badge-blue); }
+.badge-green   { background: var(--badge-green-bg);   color: var(--badge-green); }
+.badge-orange  { background: var(--badge-orange-bg);  color: var(--badge-orange); }
+
+/* ══════════════════════════
+   PROGRESS BAR
+   Barra de progreso con degradado animado.
+══════════════════════════ */
+.progress-bar {
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));  /* Gradiente cian→violeta */
+  transition: width 0.6s ease;
+}
+
+/* ══════════════════════════
+   FILTER ROW
+   Fila de filtros con selects para filtrar listas.
+══════════════════════════ */
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.filter-label  { font-size: 13px; color: var(--text-dim); }
+.filter-select {
+  background: var(--surface2);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  padding: 7px 12px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.filter-select:focus { border-color: var(--accent-1); box-shadow: 0 0 0 3px var(--orange-bg); }
+
+/* ══════════════════════════
+   EMPTY STATE
+   Mensaje cuando no hay datos que mostrar.
+══════════════════════════ */
+.empty-state      { text-align: center; padding: 40px 20px; }
+.empty-state-icon { font-size: 36px; margin-bottom: 10px; }
+.empty-state-text { font-size: 0.84rem; color: var(--text-muted); }
+
+/* ══════════════════════════
+   TABLE
+   Tabla de recursos con fondo glassmorphism.
+══════════════════════════ */
+.table-wrap {
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+table            { width: 100%; border-collapse: collapse; }
+th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: rgba(3,7,16,0.6);          /* Cabecera más oscura */
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 13px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border-lite);
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td      { background: rgba(0,212,255,0.04); }   /* Hover sutil en filas */
+/* ══════════════════════════
+   NAV SECUNDARIA
+   Barra de navegación con links Inicio/Créditos
+══════════════════════════ */
+.secondary-nav {
+  background: rgba(3,7,16,0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-link {
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.nav-link:hover {
+  background: rgba(0,212,255,0.08);
+  color: var(--text);
+  border-color: rgba(0,212,255,0.15);
+}
+
+.nav-link.active {
+  background: linear-gradient(135deg, rgba(0,212,255,0.12), rgba(124,58,237,0.12));
+  color: var(--accent-1);
+  border-color: rgba(0,212,255,0.25);
+}
+/* ══════════════════════════
+   RESPONSIVE
+   Ajustes para pantallas pequeñas.
+══════════════════════════ */
+/* ══════════════════════════
+RESPONSIVE - BARRA INFERIOR
+Ajustes para pantallas móviles.
+Transforma el sidebar en una barra inferior.
+══════════════════════════ */
+/* ── 1. TABLETS Y PANTALLAS MEDIANAS (Hasta 1024px) ── */
+@media (max-width: 1024px) {
+  :root { 
+    --sidebar-w: 200px; /* Reducimos un poco el sidebar */
+  }
+  
+  .content {
+    padding: 20px; /* Menos espacio en blanco */
+  }
+
+  /* Las tablas deben poder deslizarse si no caben */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ── 2. MÓVILES (Hasta 768px - Cubre desde 393px) ── */
+@media (max-width: 768px) {
+  :root { 
+    --sidebar-w: 0px; 
+  }
+
+  /* ── Barra Superior y Contenido ── */
+  .topbar {
+    padding: 0 16px; /* Liberar espacio lateral en pantallas pequeñas */
+  }
+  
+  .main {
+    margin-left: 0; 
+    padding-bottom: 70px; /* Espacio exacto para la barra inferior */
+  }
+
+  .content {
+    padding: 16px;
+  }
+
+  /* ── Encabezados de página y botones ── */
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .page-header .btn-primary {
+    width: 100%; /* Botones de acción ocupan todo el ancho en móvil */
+    justify-content: center;
+  }
+
+  /* ── Navegación Inferior (Sidebar transformado) ── */
+  .sidebar {
+    display: flex !important; 
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    left: 0;
+    width: 100%;
+    height: 65px; 
+    flex-direction: row; 
+    justify-content: space-between; 
+    align-items: center;
+    background: rgba(5, 10, 20, 0.95); 
+    backdrop-filter: blur(12px);
+    border-right: none;
+    border-top: 1px solid var(--border-accent); 
+    padding: 0 10px; /* Pequeño padding lateral para que los iconos no toquen los bordes en 393px */
+    z-index: 1000;
+  }
+
+  .sidebar-logo { display: none !important; }
+
+  .nav {
+    flex-direction: row;
+    width: 100%;
+    padding: 0;
+    justify-content: space-between; /* Distribuye uniformemente */
+    overflow: hidden;
+    gap: 0;
+  }
+
+  .nav-item {
+    flex-direction: column; 
+    padding: 6px 4px;
+    font-size: 9px; /* Fuente más pequeña para que quepan 6 items en 393px */
+    gap: 4px;
+    border-radius: var(--radius-sm);
+    width: auto;
+    background: none;
+    border: none;
+    text-align: center;
+  }
+
+  .nav-item svg {
+    width: 20px; 
+    height: 20px;
+    opacity: 0.7;
+    margin: 0 auto;
+  }
+
+  .nav-item.active { 
+    background: rgba(0,212,255,0.08); 
+    color: var(--accent-1);
+  }
+
+  /* ── Formularios en Modales (Para evitar que se aplasten en 393px) ── */
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* ── Grid de Estadísticas ── */
+  .stats-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .stat-card {
+    flex-direction: column; 
+    align-items: flex-start;
+    padding: 12px; 
+    gap: 8px;
+  }
+
+  .stat-icon {
+    width: 32px !important; 
+    height: 32px !important;
+    font-size: 14px;
+  }
+
+  /* ── Calendario ── */
+  .calendar-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .calendar-container table {
+    min-width: 500px; /* Fuerza el scroll horizontal en vez de aplastar las celdas */
+  }
+}
+

@@ -1,0 +1,165 @@
+/* ═══════════════════════════════════
+   components.css
+   Estilos de los componentes reutilizables:
+   - Proyectos (tarjetas en grid)
+   - Actividades (lista con icono de acciones)
+   - Hitos (lista con círculo de estado)
+   Todos usan glassmorphism para mantener coherencia
+   visual con el fondo de luces del diseño.
+═══════════════════════════════════ */
+
+/* ══════════════════════════
+   PROYECTOS
+   Grid de tarjetas, una por proyecto.
+══════════════════════════ */
+
+/* Grid responsivo: se adapta al ancho disponible */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));   /* Columnas dinámicas mín 270px */
+  gap: 16px;
+}
+
+/* Tarjeta individual de proyecto */
+.project-card {
+  background: var(--surface);
+  backdrop-filter: blur(20px);       /* Efecto cristal sobre el fondo de luces */
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Línea decorativa en la parte superior de la tarjeta */
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+/* Al hacer hover: sube la tarjeta, resalta el borde y muestra la línea superior */
+.project-card:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0,212,255,0.08);
+}
+.project-card:hover::before { opacity: 1; }   /* Muestra la línea de acento al hover */
+
+/* Título del proyecto */
+.project-card-title   { font-size: 0.94rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+
+/* Descripción del proyecto */
+.project-card-desc    { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 12px; line-height: 1.5; }
+
+/* Fechas inicio/fin */
+.project-card-dates   { font-size: 0.72rem; color: var(--text-muted); }
+
+/* Contenedor de los botones de editar/eliminar, posicionados arriba a la derecha */
+.project-card-actions { position: absolute; top: 14px; right: 14px; display: flex; gap: 6px; }
+
+
+/* ══════════════════════════
+   ACTIVIDADES
+   Lista de actividades, cada una como una fila.
+══════════════════════════ */
+
+/* Fila de una actividad */
+.activity-item {
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  transition: border-color 0.2s, transform 0.15s;
+  animation: slideIn 0.3s ease;    /* Aparece deslizándose desde la izquierda */
+}
+
+/* Animación de entrada para nuevas actividades */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.activity-item:hover { border-color: var(--border-accent); transform: translateX(2px); }
+
+/* Columna izquierda: nombre + metadatos */
+.activity-left    { display: flex; flex-direction: column; gap: 5px; }
+
+/* Nombre de la actividad + badge de estado inline */
+.activity-name    { font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+/* Metadatos: proyecto, responsable, fechas */
+.activity-meta    { font-size: 0.75rem; color: var(--text-muted); }
+
+/* Botones de acciones (editar / eliminar) */
+.activity-actions { display: flex; gap: 6px; }
+
+
+/* ══════════════════════════
+   HITOS
+   Lista de hitos con un círculo indicador de estado.
+══════════════════════════ */
+
+/* Fila de un hito */
+.milestone-item {
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+  transition: border-color 0.2s, transform 0.15s;
+  animation: slideIn 0.3s ease;
+}
+.milestone-item:hover { border-color: var(--border-accent); transform: translateX(2px); }
+
+/* Círculo indicador de estado (pendiente = borde gris, cumplido = verde relleno) */
+.milestone-circle {
+  width: 34px; height: 34px; flex-shrink: 0;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--border2);
+  color: var(--text-muted);
+  transition: all 0.3s;
+}
+
+/* Estado Cumplido: círculo verde con check */
+.milestone-circle.done {
+  border-color: var(--green);
+  background: var(--green-light);
+  color: var(--green);
+  box-shadow: 0 0 12px rgba(34,197,94,0.25);   /* Brillo verde suave */
+}
+.milestone-circle svg { width: 14px; height: 14px; }
+
+/* Área de información del hito */
+.milestone-info    { flex: 1; }
+
+/* Nombre del hito + badge inline */
+.milestone-name    { font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+/* Descripción del hito */
+.milestone-desc    { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
+
+/* Metadatos del hito (proyecto asociado, cantidad de actividades) */
+.milestone-meta    { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
+
+/* Botones de acciones (editar / eliminar) */
+.milestone-actions { display: flex; gap: 6px; }
